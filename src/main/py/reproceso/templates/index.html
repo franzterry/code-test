@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Reproceso del motor de calidad</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  </head>
+  <body>
+    <div class="page-shell">
+    <div class="container">
+      <div class="hero">
+        <div class="hero-copy">
+          <div class="eyebrow">BCP QUALY</div>
+          <h1 class="title">Reproceso del motor de calidad</h1>
+          <div class="subtitle">
+            Carga un archivo CSV y registra su contenido en la tabla Delta de Databricks con una validación simple y visible.
+          </div>
+          <div class="pill-row">
+            <span class="pill">Columnas requeridas: nbrtabla, codapp, fecrutina</span>
+            <span class="pill">Fecha obligatoria: YYYY-MM-DD</span>
+            <span class="pill">Destino final: Delta en Databricks</span>
+          </div>
+        </div>
+        <div class="hero-art">
+          <img class="logo" src="{{ url_for('static', filename='logo.png') }}" alt="Logo" onerror="this.style.display='none'" />
+        </div>
+      </div>
+
+      <div class="card stack">
+        <div class="section-head">
+          <h2 class="section-title">1. Selecciona tu archivo</h2>
+          <p class="section-text">El sistema valida las columnas y la fecha antes de registrar las filas.</p>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="msg {{ category }}">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <form action="/upload" method="post" enctype="multipart/form-data">
+          <div class="form-row">
+            <label class="file-input">
+              <span class="file-label">Archivo CSV</span>
+              <input id="file-input" type="file" name="file" accept=".csv" autocomplete="off" required />
+            </label>
+            <button type="submit">Cargar archivo</button>
+          </div>
+          <div id="selected-file" class="selected-file">Ningún archivo seleccionado</div>
+          <div class="microcopy">Solo se aceptan archivos .csv con los encabezados esperados.</div>
+          <div class="helper-grid">
+            <div class="helper-card">
+              <strong>Encabezados exactos</strong>
+              <span>nbrtabla, codapp, fecrutina</span>
+            </div>
+            <div class="helper-card">
+              <strong>Formato de fecha</strong>
+              <span>2026-03-17</span>
+            </div>
+            <div class="helper-card">
+              <strong>Destino</strong>
+              <span>Tabla Delta en Databricks</span>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      {% if upload_result %}
+        <div class="card result-card">
+          <h2 class="section-title">2. Resultado de la carga</h2>
+          <p class="section-text">La inserción terminó sin error en el backend configurado.</p>
+          <div class="result-grid">
+            <div class="result-item">
+              <span class="result-label">Archivo</span>
+              <strong>{{ upload_result.filename }}</strong>
+            </div>
+            <div class="result-item">
+              <span class="result-label">Filas enviadas</span>
+              <strong>{{ upload_result.inserted }}</strong>
+            </div>
+            <div class="result-item result-item-wide">
+              <span class="result-label">Destino</span>
+              <strong>{{ upload_result.backend_name }}</strong>
+              <span>{{ upload_result.table_name }}</span>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+
+      {% if preview %}
+        <div class="card preview-card">
+          <h2 class="section-title">3. Vista previa del archivo</h2>
+          <p class="section-text">Se muestran las primeras 20 filas reconocidas antes o después del registro.</p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>nbrtabla</th>
+                  <th>codapp</th>
+                  <th>fecrutina</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in preview %}
+                  <tr>
+                    <td>{{ row.get('nbrtabla','') }}</td>
+                    <td>{{ row.get('codapp','') }}</td>
+                    <td>{{ row.get('fecrutina','') }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+    </div>
+    <script>
+      const fileInput = document.getElementById('file-input');
+      const selectedFile = document.getElementById('selected-file');
+
+      if (fileInput && selectedFile) {
+        fileInput.addEventListener('change', () => {
+          const fileName = fileInput.files && fileInput.files.length > 0
+            ? fileInput.files[0].name
+            : 'Ningún archivo seleccionado';
+          selectedFile.textContent = `Archivo seleccionado: ${fileName}`;
+        });
+      }
+    </script>
+  </body>
+</html>
