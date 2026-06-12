@@ -1,0 +1,640 @@
+query getMetricsV4(
+  $endTime: DateTime
+  $first: Int
+  $metricName: String!
+  $metricsFilter: MetricsFilter!
+  $startTime: DateTime!
+  $deduplicateValues: Boolean
+) {
+  getMetricsV4(
+    endTime: $endTime
+    first: $first
+    metricName: $metricName
+    metricsFilter: $metricsFilter
+    startTime: $startTime
+    deduplicateValues: $deduplicateValues
+  ) {
+    metricsJson
+    __typename
+  }
+}
+----
+{
+  "metricsFilter": {
+    "ootb": false,
+    "monitorId": "a1444e79-9a6c-40cd-aca7-9ee1ad9fcb3e",
+    "field": "account_id",
+    "dwId": "c1744951-be88-453e-b2a9-e2b654472f15"
+  },
+  "metricName": "null_rate",
+  "startTime": "2026-06-07T05:00:00.000Z",
+  "endTime": "2026-06-08T05:00:00.000Z"
+}
+---
+query GetMonitorQueries(
+  $allQueries: Boolean,
+  $bootstrap: Boolean,
+  $comparisonDataSourceType: ComparisonDataSourceType,
+  $formatSql: Boolean,
+  $monitorUuid: UUID!,
+  $stripMetadataComment: Boolean
+) {
+  getMonitorQueries(
+    allQueries: $allQueries,
+    bootstrap: $bootstrap,
+    comparisonDataSourceType: $comparisonDataSourceType,
+    formatSql: $formatSql,
+    monitorUuid: $monitorUuid,
+    stripMetadataComment: $stripMetadataComment
+  ) {
+    queries
+  }
+}
+---
+{
+  "monitorUuid": "ea07ce27-4621-4201-a191-e057534cdb69"
+}
+-------------------------
+query getMonitors($monitorTypes: [UserDefinedMonitors], $statusTypes: [MonitorStatusType], $consolidatedStatusTypes: [ConsolidatedMonitorStatusType], $descriptionFieldOrTable: [String], $domainId: UUID, $createdByFilters: CreatedByFilters, $search: [String], $orderBy: String, $limit: Int, $offset: Int, $uuids: [String], $withScheduleConfig: Boolean!, $withSegmentedExpressions: Boolean!, $withSelectExpressions: Boolean!, $withSelectedMetrics: Boolean!, $withSensitivity: Boolean!, $labels: [String], $withSegmentCount: Boolean!, $createdBy: [String!], $includeOotbReplacement: Boolean, $assetTags: [TagKeyValuePairInput!], $mcons: [String]) {
+  getMonitors(
+    monitorTypes: $monitorTypes
+    statusTypes: $statusTypes
+    consolidatedStatusTypes: $consolidatedStatusTypes
+    descriptionFieldOrTable: $descriptionFieldOrTable
+    domainId: $domainId
+    createdByFilters: $createdByFilters
+    createdBy: $createdBy
+    search: $search
+    orderBy: $orderBy
+    limit: $limit
+    offset: $offset
+    uuids: $uuids
+    labels: $labels
+    includeOotbReplacement: $includeOotbReplacement
+    assetTags: $assetTags
+    mcons: $mcons
+    searchFields: [RULE_NAME, RULE_DESCRIPTION, ENTITIES, MONITOR_FIELDS, NAMESPACE, UPDATER_ID]
+  ) {
+    uuid
+    target {
+      uuid
+      dwId
+      connectionUuid
+      timeout
+      whereCondition
+      segments {
+        type
+        ... on FilterValueField {
+          field
+          __typename
+        }
+        ... on FilterValueSql {
+          sql
+          __typename
+        }
+        __typename
+      }
+      dataSource {
+        connectionType
+        type
+        ... on DataSourceInputTable {
+          mcon
+          type
+          schema {
+            fields {
+              name
+              mainType
+              type
+              tzAware
+              __typename
+            }
+            __typename
+          }
+          __typename
+        }
+        ... on DataSourceInputSql {
+          sql
+          type
+          schema {
+            fields {
+              name
+              mainType
+              type
+              tzAware
+              __typename
+            }
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    source {
+      uuid
+      dwId
+      connectionUuid
+      timeout
+      whereCondition
+      segments {
+        type
+        ... on FilterValueField {
+          field
+          __typename
+        }
+        ... on FilterValueSql {
+          sql
+          __typename
+        }
+        __typename
+      }
+      dataSource {
+        connectionType
+        type
+        ... on DataSourceInputTable {
+          mcon
+          type
+          schema {
+            fields {
+              name
+              mainType
+              type
+              tzAware
+              __typename
+            }
+            __typename
+          }
+          __typename
+        }
+        ... on DataSourceInputSql {
+          type
+          sql
+          schema {
+            fields {
+              name
+              mainType
+              type
+              tzAware
+              __typename
+            }
+            __typename
+          }
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    dataSource {
+      uuid
+      connectionUuid
+      customSql
+      transforms {
+        alias
+        categories {
+          label
+          description
+          examples
+          __typename
+        }
+        field
+        fieldValueRange {
+          lowerBound
+          upperBound
+          __typename
+        }
+        function
+        id
+        prompt
+        outputType
+        sqlExpression
+        modelName
+        modelConnectionId
+        fieldConfigList {
+          field
+          type
+          count
+          __typename
+        }
+        __typename
+      }
+      schema {
+        fields {
+          mainType
+          mode
+          name
+          nested
+          sqlName
+          type
+          tzAware
+          __typename
+        }
+        __typename
+      }
+      tables {
+        mcon
+        fullTableId
+        __typename
+      }
+      type
+      uuid
+      __typename
+    }
+    entities
+    entityMcons
+    agentMcon
+    assignedAssetMcons
+    unassignedAssetMcons
+    monitorType
+    customSqlRuleType
+    consolidatedMonitorStatus
+    breached
+    monitorFields
+    timeBucketed
+    monitorTimeAxisFieldName
+    monitorTimeAxisFieldType
+    monitorTimeAxisTimezone
+    resourceId
+    creatorId
+    updaterId
+    ruleDescription
+    ruleVariables
+    createdTime
+    lastUpdateTime
+    scheduleType
+    namespace
+    isTemplateManaged
+    migratedToUuid
+    prevExecutionTime
+    nextExecutionTime
+    isSnoozeable
+    isSnoozed
+    isPaused
+    isTunable
+    tuningUnavailableReason
+    isDraft
+    conditionalSnooze
+    isTransitioningDataProvider
+    snoozeUntilTime
+    whereCondition
+    segmentedExpressions
+    exceptions
+    breachRate
+    historyDays
+    usePartitionClause
+    connectionId
+    sensitivity @include(if: $withSensitivity)
+    selectExpressions @include(if: $withSelectExpressions) {
+      id
+      expression
+      dataType
+      isRawColumnName
+      __typename
+    }
+    selectedMetrics @include(if: $withSelectedMetrics)
+    scheduleConfig @include(if: $withScheduleConfig) {
+      startTime
+      scheduleType
+      intervalMinutes
+      intervalCrontab
+      intervalCrontabDayOr
+      timezone
+      dynamicScheduleMcons
+      __typename
+    }
+    samplingConfig {
+      count
+      percentage
+      __typename
+    }
+    filters {
+      type
+      operator
+      conditions {
+        __typename
+        ... on FilterBinary {
+          type
+          predicate {
+            name
+            negated
+            __typename
+          }
+          left {
+            type
+            ... on FilterValueField {
+              field
+              __typename
+            }
+            ... on FilterValueMapKey {
+              mapColumn
+              key
+              __typename
+            }
+            ... on FilterValueSql {
+              sql
+              __typename
+            }
+            ... on FilterValueLiteral {
+              literal
+              __typename
+            }
+            __typename
+          }
+          right {
+            type
+            ... on FilterValueField {
+              field
+              __typename
+            }
+            ... on FilterValueMapKey {
+              mapColumn
+              key
+              __typename
+            }
+            ... on FilterValueSql {
+              sql
+              __typename
+            }
+            ... on FilterValueLiteral {
+              literal
+              __typename
+            }
+            __typename
+          }
+          __typename
+        }
+        ... on FilterUnary {
+          type
+          predicate {
+            name
+            negated
+            __typename
+          }
+          value {
+            type
+            ... on FilterValueField {
+              field
+              __typename
+            }
+            ... on FilterValueMapKey {
+              mapColumn
+              key
+              __typename
+            }
+            ... on FilterValueSql {
+              sql
+              __typename
+            }
+            ... on FilterValueLiteral {
+              literal
+              __typename
+            }
+            __typename
+          }
+          __typename
+        }
+        ... on FilterSql {
+          type
+          sql
+          __typename
+        }
+        ... on FilterGroup {
+          type
+          operator
+          conditions {
+            __typename
+            ... on FilterBinary {
+              type
+              predicate {
+                name
+                negated
+                __typename
+              }
+              left {
+                type
+                ... on FilterValueField {
+                  field
+                  __typename
+                }
+                ... on FilterValueMapKey {
+                  mapColumn
+                  key
+                  __typename
+                }
+                ... on FilterValueSql {
+                  sql
+                  __typename
+                }
+                ... on FilterValueLiteral {
+                  literal
+                  __typename
+                }
+                __typename
+              }
+              right {
+                type
+                ... on FilterValueField {
+                  field
+                  __typename
+                }
+                ... on FilterValueMapKey {
+                  mapColumn
+                  key
+                  __typename
+                }
+                ... on FilterValueSql {
+                  sql
+                  __typename
+                }
+                ... on FilterValueLiteral {
+                  literal
+                  __typename
+                }
+                __typename
+              }
+              __typename
+            }
+            ... on FilterUnary {
+              type
+              predicate {
+                name
+                negated
+                __typename
+              }
+              value {
+                type
+                ... on FilterValueField {
+                  field
+                  __typename
+                }
+                ... on FilterValueMapKey {
+                  mapColumn
+                  key
+                  __typename
+                }
+                ... on FilterValueSql {
+                  sql
+                  __typename
+                }
+                ... on FilterValueLiteral {
+                  literal
+                  __typename
+                }
+                __typename
+              }
+              __typename
+            }
+            ... on FilterSql {
+              type
+              sql
+              __typename
+            }
+          }
+          __typename
+        }
+      }
+      __typename
+    }
+    segmentedExpressions @include(if: $withSegmentedExpressions)
+    segmentationType @include(if: $withSegmentedExpressions)
+    notes
+    priority
+    dataQualityDimension
+    segmentCount @include(if: $withSegmentCount)
+    aggTimeInterval
+    labels
+    failureAudiences
+    name
+    description
+    domainUuids
+    domains {
+      uuid
+      name
+      __typename
+    }
+    agentSpanFilters {
+      agent {
+        value
+        __typename
+      }
+      spanName {
+        value
+        __typename
+      }
+      task {
+        value
+        __typename
+      }
+      workflow {
+        value
+        __typename
+      }
+      __typename
+    }
+    comparisons {
+      metric
+      field
+      fields
+      sourceField
+      targetField
+      operator
+      threshold
+      isThresholdRelative
+      lowerThreshold
+      upperThreshold
+      comparisonType
+      baselineTrailingDays
+      baselineStart
+      baselineEnd
+      numBins
+      customMetric {
+        uuid
+        displayName
+        metricName
+        sqlExpression
+        sourceSqlExpression
+        targetSqlExpression
+        __typename
+      }
+      __typename
+    }
+    highSegmentCount
+    notificationSettings {
+      uuid
+      recipients
+      recipientsDisplayNames
+      type
+      __typename
+    }
+    dashboards {
+      id
+      title
+      __typename
+    }
+    tags {
+      name
+      value
+      __typename
+    }
+    sevenDaysIncidentCount
+    incidentCountHistory {
+      day
+      incidentCount
+      __typename
+    }
+    commentsCount
+    collectionLagHours
+    bootstrap {
+      state
+      exceptionsDetail {
+        type
+        description
+        __typename
+      }
+      startedAt
+      finishedAt
+      daysLoaded
+      estimatedSecondsRemaining
+      progressPercent
+      __typename
+    }
+    version
+    timeout
+    udmType
+    isAgentTraceAggregation
+    __typename
+  }
+}
+----
+{
+  "uuids": [
+    "39366751-cd8d-42c7-832f-b42b8345a28e"
+  ],
+  "withSegmentCount": false,
+  "withScheduleConfig": true,
+  "withSegmentedExpressions": true,
+  "withSelectExpressions": false,
+  "withSelectedMetrics": true,
+  "withSensitivity": false
+}
+----
+query GetMonitors(
+  $uuids: [String]
+  $limit: Int
+) {
+  getMonitors(
+    uuids: $uuids
+    limit: $limit
+  ) {
+    uuid
+    alertIds
+    entities
+    createdTime
+    lastUpdateTime
+  }
+}
+-----
+{
+  "limit": 10
+}
