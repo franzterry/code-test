@@ -1,5 +1,7 @@
 #requests
 #python-dotenv
+#MONTE_CARLO_MCD_ID=01e7e9aaad3347469d76c65d3b96072f+djErdXMx
+#MONTE_CARLO_MCD_TOKEN=DCrBeSRHDNQ7GV4ZYiCW9j5GDZTQmEnihxMr25nGcGM0uOQfQB2xRFhx
 
 import os
 from dotenv import load_dotenv
